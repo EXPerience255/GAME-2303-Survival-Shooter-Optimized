@@ -4,7 +4,9 @@ public class PlayerMovement : MonoBehaviour
 {
 	public float speed = 6f;
 
-	private Vector3 movement;
+    PlayerInputActions input;
+	private Vector2 moveInput;
+    private Vector3 movement;
 	private Animator anim;
 	private Rigidbody playerRigidbody;
 	private int floorMask;
@@ -12,19 +14,40 @@ public class PlayerMovement : MonoBehaviour
 
 	void Awake()
 	{
-		floorMask = LayerMask.GetMask("Floor");
+        input = new PlayerInputActions();
+        floorMask = LayerMask.GetMask("Floor");
 		anim = GetComponent<Animator>();
 		playerRigidbody = GetComponent<Rigidbody>();
 	}
 
-	void FixedUpdate()
-	{
-		float h = Input.GetAxisRaw("Horizontal");
-		float v = Input.GetAxisRaw("Vertical");
+    private void OnEnable()
+    {
+        input.Enable();
+    }
 
-		Move(h, v);
+    private void OnDisable()
+    {
+        input.Disable();
+    }
+
+	void Start()
+	{
+		input.Controls.Move.performed += ctx =>
+		{
+			moveInput = input.Controls.Move.ReadValue<Vector2>();
+        };
+
+		input.Controls.Move.canceled += ctx =>
+		{
+			moveInput = new Vector2(0, 0);
+		};
+	}
+
+    void FixedUpdate()
+	{
+		Move(moveInput.x, moveInput.y);
 		Turning();
-		Animating(h, v);
+		Animating(moveInput.x, moveInput.y);
 	}
 
 	void Move(float h, float v)
@@ -53,6 +76,6 @@ public class PlayerMovement : MonoBehaviour
 	{
 		bool walking = h != 0f || v != 0f;
 
-		anim.SetBool("IsWalking", walking);
+		anim.SetBool(AnimationHasher.IsWalking, walking);
 	}
 }

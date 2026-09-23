@@ -7,6 +7,7 @@ public class PlayerShooting : MonoBehaviour
     public float range = 100f;
 
 
+    PlayerInputActions input;
     float timer;
     Ray shootRay = new Ray();
     RaycastHit shootHit;
@@ -20,6 +21,7 @@ public class PlayerShooting : MonoBehaviour
 
     void Awake ()
     {
+        input = new PlayerInputActions();
         shootableMask = LayerMask.GetMask ("Shootable");
         gunParticles = GetComponent<ParticleSystem> ();
         gunLine = GetComponent <LineRenderer> ();
@@ -28,16 +30,34 @@ public class PlayerShooting : MonoBehaviour
     }
 
 
+    private void OnEnable()
+    {
+        input.Enable();
+    }
+
+
+    private void OnDisable()
+    {
+        input.Disable();
+    }
+
+
+    private void Start()
+    {
+        input.Controls.Shoot.performed += ctx =>
+        {
+            if (timer >= timeBetweenBullets && Time.timeScale != 0)
+            {
+                Shoot();
+            }
+        };
+    }
+
     void Update ()
     {
         timer += Time.deltaTime;
 
-		if(Input.GetButton ("Fire1") && timer >= timeBetweenBullets && Time.timeScale != 0)
-        {
-            Shoot ();
-        }
-
-        if(timer >= timeBetweenBullets * effectsDisplayTime)
+        if (timer >= timeBetweenBullets * effectsDisplayTime)
         {
             DisableEffects ();
         }

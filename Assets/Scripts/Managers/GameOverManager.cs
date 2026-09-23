@@ -21,7 +21,7 @@ public class GameOverManager : MonoBehaviour
     {
         if (playerHealth.playerInterface.Health <= 0)
         {
-            anim.SetTrigger("GameOver");
+            anim.SetTrigger(AnimationHasher.GameOver);
 
 			restartTimer += Time.deltaTime;
 

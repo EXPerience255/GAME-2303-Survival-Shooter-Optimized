@@ -59,7 +59,7 @@ public class EnemyHealth : MonoBehaviour
 
         capsuleCollider.isTrigger = true;
 
-        anim.SetTrigger ("Dead");
+        anim.SetTrigger (AnimationHasher.Dead);
 
         enemyAudio.clip = stats.DeathSound;
         enemyAudio.Play ();

@@ -52,7 +52,7 @@ public class EnemyAttack : MonoBehaviour
 
         if(playerHealth.playerInterface.Health <= 0)
         {
-            anim.SetTrigger ("PlayerDead");
+            anim.SetTrigger (AnimationHasher.PlayerDead);
         }
     }
 
