@@ -2,11 +2,8 @@
 
 public class EnemyHealth : MonoBehaviour
 {
-    public int startingHealth = 100;
+    public EnemyObj stats;
     public int currentHealth;
-    public float sinkSpeed = 2.5f;
-    public int scoreValue = 10;
-    public AudioClip deathClip;
 
 
     Animator anim;
@@ -24,7 +21,7 @@ public class EnemyHealth : MonoBehaviour
         hitParticles = GetComponentInChildren <ParticleSystem> ();
         capsuleCollider = GetComponent <CapsuleCollider> ();
 
-        currentHealth = startingHealth;
+        currentHealth = stats.MaxHealth;
     }
 
 
@@ -32,7 +29,7 @@ public class EnemyHealth : MonoBehaviour
     {
         if(isSinking)
         {
-            transform.Translate (-Vector3.up * sinkSpeed * Time.deltaTime);
+            transform.Translate (-Vector3.up * stats.SinkSpeed * Time.deltaTime);
         }
     }
 
@@ -64,7 +61,7 @@ public class EnemyHealth : MonoBehaviour
 
         anim.SetTrigger ("Dead");
 
-        enemyAudio.clip = deathClip;
+        enemyAudio.clip = stats.DeathSound;
         enemyAudio.Play ();
     }
 
@@ -74,7 +71,7 @@ public class EnemyHealth : MonoBehaviour
         GetComponent <UnityEngine.AI.NavMeshAgent> ().enabled = false;
         GetComponent <Rigidbody> ().isKinematic = true;
         isSinking = true;
-        ScoreManager.score += scoreValue;
+        ScoreManager.playerInterface.Score += stats.ScoreValue;
         Destroy (gameObject, 2f);
     }
 }

@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.SceneManagement;
 
 
 public class PlayerHealth : MonoBehaviour
 {
+    public PlayerUI playerInterface;
     public int startingHealth = 100;
     public int currentHealth;
     public Slider healthSlider;
@@ -29,7 +29,7 @@ public class PlayerHealth : MonoBehaviour
         playerAudio = GetComponent <AudioSource> ();
         playerMovement = GetComponent <PlayerMovement> ();
         playerShooting = GetComponentInChildren <PlayerShooting> ();
-        currentHealth = startingHealth;
+        playerInterface.Health = startingHealth;
     }
 
 
@@ -50,14 +50,10 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage (int amount)
     {
         damaged = true;
-
-        currentHealth -= amount;
-
-        healthSlider.value = currentHealth;
-
+        playerInterface.Health -= amount;
         playerAudio.Play ();
 
-        if(currentHealth <= 0 && !isDead)
+        if(playerInterface.Health <= 0 && !isDead)
         {
             Death ();
         }

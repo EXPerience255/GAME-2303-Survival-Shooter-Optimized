@@ -23,7 +23,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (updateClock > updateTimer)
         {
-            if (health.currentHealth > 0 && pHealth.currentHealth > 0)
+            if (health.currentHealth > 0 && pHealth.playerInterface.Health > 0)
             {
                 agent.SetDestination(player.position);
             }

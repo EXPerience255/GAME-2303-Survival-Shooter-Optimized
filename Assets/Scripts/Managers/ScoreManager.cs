@@ -1,23 +1,14 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 
 public class ScoreManager : MonoBehaviour
 {
-    public static int score;
-
-
-    [SerializeField] Text text;
-
+    public static PlayerUI playerInterface;
 
     void Awake ()
     {
-        score = 0;
-    }
-
-
-    void Update ()
-    {
-        text.text = "Score: " + score;
+        // using 'static' keyword prevents serialization in the editor, so this is the only way to grab the scriptable object.
+        // probably increases load time, but it decreases dependancy. is it worth it?
+        playerInterface = FindAnyObjectByType<PlayerHealth>().playerInterface;
+        playerInterface.Score = 0;
     }
 }
