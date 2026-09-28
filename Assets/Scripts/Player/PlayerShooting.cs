@@ -17,6 +17,7 @@ public class PlayerShooting : MonoBehaviour
     AudioSource gunAudio;
     Light gunLight;
     float effectsDisplayTime = 0.2f;
+    bool isShooting;
 
 
     void Awake ()
@@ -44,18 +45,18 @@ public class PlayerShooting : MonoBehaviour
 
     private void Start()
     {
-        input.Controls.Shoot.performed += ctx =>
-        {
-            if (timer >= timeBetweenBullets && Time.timeScale != 0)
-            {
-                Shoot();
-            }
-        };
+        input.Controls.Shoot.performed += ctx => isShooting = true;
+        input.Controls.Shoot.canceled += ctx => isShooting = false;
     }
 
     void Update ()
     {
         timer += Time.deltaTime;
+
+        if (isShooting && timer >= timeBetweenBullets && Time.timeScale != 0)
+        {
+            Shoot();
+        }
 
         if (timer >= timeBetweenBullets * effectsDisplayTime)
         {
