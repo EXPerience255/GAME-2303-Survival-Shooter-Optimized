@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
     public EnemyObj stats;
+    public EnemyManager sourcePool;
     public int currentHealth;
 
 
@@ -72,6 +74,13 @@ public class EnemyHealth : MonoBehaviour
         GetComponent <Rigidbody> ().isKinematic = true;
         isSinking = true;
         ScoreManager.playerInterface.Score += stats.ScoreValue;
-        Destroy (gameObject, 2f);
+        StartCoroutine(ReturnToPool(2));
+    }
+
+
+    private IEnumerator ReturnToPool(float time)
+    {
+        yield return new WaitForSeconds (time);
+        sourcePool.enemyPool.Release(gameObject);
     }
 }
